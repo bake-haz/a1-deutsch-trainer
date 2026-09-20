@@ -1,0 +1,27 @@
+{
+  "name": "a1-deutsch-trainer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A1 Deutsch Trainer - 面向中国成年零基础德语学习者的 A1 地基 + 考试过关 + 长期记忆训练系统",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "postinstall": "node scripts/copy-pdf-worker.mjs"
+  },
+  "dependencies": {
+    "next": "14.2.15",
+    "pdfjs-dist": "4.7.76",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "20.16.11",
+    "@types/react": "18.3.11",
+    "@types/react-dom": "18.3.0",
+    "autoprefixer": "10.4.20",
+    "postcss": "8.4.47",
+    "tailwindcss": "3.4.14",
+    "typescript": "5.6.3"
+  }
+}

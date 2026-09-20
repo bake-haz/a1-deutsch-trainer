@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: #f6f7f9;
+  color: #1f2933;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* App shell: mobile-first, max width centered on desktop */
+.app-shell {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #ffffff;
+  position: relative;
+  box-shadow: 0 0 0 1px #e3e8ec;
+}
+
+/* Big, comfortable tap targets for adult learners (spec §32) */
+.tap {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0 18px;
+  cursor: pointer;
+  transition: transform 0.05s ease, background 0.15s ease;
+  user-select: none;
+}
+.tap:active {
+  transform: scale(0.98);
+}
+
+.btn-primary {
+  background: #2f6f6b;
+  color: #fff;
+  border: none;
+}
+.btn-primary:hover {
+  background: #28615d;
+}
+.btn-ghost {
+  background: #eef1f3;
+  color: #1f2933;
+  border: 1px solid #e3e8ec;
+}
+.btn-danger {
+  background: #fbeae6;
+  color: #a6432f;
+  border: 1px solid #f0d4cc;
+}
+.btn-good {
+  background: #e7f3ec;
+  color: #2f7d4f;
+  border: 1px solid #cfe7da;
+}
+.btn-warn {
+  background: #fbf0e4;
+  color: #b06a2c;
+  border: 1px solid #f0dcbf;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #e3e8ec;
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.de-text {
+  font-family: Georgia, "Times New Roman", "Songti SC", serif;
+  font-size: 1.35rem;
+  line-height: 1.6;
+  color: #1f2933;
+  letter-spacing: 0.2px;
+}
+
+/* German is the training subject; Chinese supports understanding (spec §31) */
+.zh-text {
+  color: #67737d;
+  font-size: 0.98rem;
+}
+
+/* status colors must NEVER be the only info carrier (spec §32): we pair with text */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.chip-new { background: #eef1f3; color: #67737d; }
+.chip-learning { background: #e6f0ef; color: #2f6f6b; }
+.chip-weak { background: #fbf0e4; color: #b06a2c; }
+.chip-stable { background: #e7f3ec; color: #2f7d4f; }
+.chip-mastered { background: #e6eef8; color: #3a6ea5; }
+
+.bottom-nav {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  border-top: 1px solid #e3e8ec;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+.bottom-nav a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 8px 0;
+  font-size: 0.72rem;
+  color: #67737d;
+  text-decoration: none;
+}
+.bottom-nav a.active {
+  color: #2f6f6b;
+  font-weight: 700;
+}
+.bottom-nav a .ico {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+/* input */
+.field {
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid #cfd8dd;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 1.1rem;
+  font-family: Georgia, "Times New Roman", "Songti SC", serif;
+  outline: none;
+}
+.field:focus {
+  border-color: #2f6f6b;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
