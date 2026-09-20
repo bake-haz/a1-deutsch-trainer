@@ -67,8 +67,8 @@ export default function WordCard({ word }: { word: string }) {
       {/* header: matched form + lemma */}
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <div className="de-text !text-[1.5rem] flex items-center gap-2">
-            <span className="break-words">{local?.matchedForm ?? word}</span>
+          <div className="de-text !text-[1.5rem] flex items-start gap-2 min-w-0">
+            <span className="break-any flex-1">{local?.matchedForm ?? word}</span>
             <button
               className="tap btn-ghost !px-2 !min-h-[36px] !text-sm shrink-0"
               onClick={() => speak(local?.matchedForm ?? word)}
@@ -80,7 +80,7 @@ export default function WordCard({ word }: { word: string }) {
 
           {/* inflection note: "wohnst 是 wohnen 的 du 变位形式。" */}
           {local?.isInflected && entry && (
-            <div className="text-xs text-warn mt-1">
+            <div className="text-xs text-warn mt-1 break-any">
               <b>{local.matchedForm}</b> 是 <b>{entry.lemma}</b> 的
               {local.grammaticalPerson ? <b> {local.grammaticalPerson} </b> : " "}
               变位形式。
@@ -88,18 +88,18 @@ export default function WordCard({ word }: { word: string }) {
           )}
 
           {entry && (
-            <div className="text-sm text-muted mt-1">
+            <div className="text-sm text-muted mt-1 break-any">
               {entry.article ? `${entry.article} ${entry.lemma}` : entry.lemma} · {entry.pos}
               {entry.plural ? ` · 复数 die ${entry.plural}` : ""}
             </div>
           )}
         </div>
-        {status && <span className={`chip chip-${status.toLowerCase()}`}>{MASTERY_LABEL[status]}</span>}
+        {status && <span className={`chip chip-${status.toLowerCase()} shrink-0`}>{MASTERY_LABEL[status]}</span>}
       </div>
 
       {/* IPA — only shown when we have a reliable value */}
-      <div className="mt-2 flex items-center gap-2">
-        <span className="text-sm text-ink font-mono">
+      <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-1 min-w-0">
+        <span className="text-sm text-ink font-mono break-any">
           {entry?.ipa ? `/${entry.ipa}/` : wiki?.ipa ? `/${wiki.ipa}/` : "—"}
         </span>
         {!(entry?.ipa || wiki?.ipa) && (
@@ -108,21 +108,22 @@ export default function WordCard({ word }: { word: string }) {
       </div>
 
       {/* Chinese */}
-      <div className="text-base text-ink mt-1">{entry?.zh ?? wiki?.gloss ?? "（本地词库未收录）"}</div>
+      <div className="text-base text-ink mt-1 break-any">{entry?.zh ?? wiki?.gloss ?? "（本地词库未收录）"}</div>
 
       {/* Conjugation (verbs) */}
       {entry?.conjugation && entry.conjugation.length > 0 && (
-        <div className="mt-3">
+        <div className="mt-3 min-w-0">
           <div className="text-xs text-muted mb-1">基本变位（现在时 · 点一下可听）</div>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-1.5 min-w-0">
             {entry.conjugation.map((c) => (
               <button
                 key={c.p + c.f}
-                className="tap btn-ghost !px-2 !min-h-[34px] !text-[0.8rem]"
+                className="tap btn-ghost !px-2 !min-h-[34px] !text-[0.8rem] gap-1"
                 onClick={() => speak(c.f)}
                 aria-label={`朗读 ${c.p} ${c.f}`}
               >
-                <span className="text-muted">{c.p}</span> <b>{c.f}</b>
+                <span className="text-muted">{c.p}</span>
+                <b>{c.f}</b>
               </button>
             ))}
           </div>
@@ -133,14 +134,14 @@ export default function WordCard({ word }: { word: string }) {
       {entry?.examples && entry.examples.length > 0 && (
         <div className="mt-3 space-y-2">
           {entry.examples.map((ex, i) => (
-            <div key={i} className="text-sm border-l-2 border-line pl-2">
-              <div className="de-text !text-[1.05rem] flex items-center gap-1">
-                <span className="break-words">{ex.de}</span>
+            <div key={i} className="text-sm border-l-2 border-line pl-2 min-w-0">
+              <div className="de-text !text-[1.05rem] flex items-start gap-1 min-w-0">
+                <span className="break-any flex-1">{ex.de}</span>
                 <button className="tap btn-ghost !px-1 !min-h-[28px] !text-xs shrink-0" onClick={() => speak(ex.de)} aria-label="朗读例句">
                   🔊
                 </button>
               </div>
-              <div className="zh-text">{ex.zh}</div>
+              <div className="zh-text break-any">{ex.zh}</div>
             </div>
           ))}
         </div>

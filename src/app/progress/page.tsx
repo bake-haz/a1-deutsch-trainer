@@ -106,7 +106,7 @@ export default function ProgressPage() {
           <div className="space-y-2">
             {weak.map((i) => (
               <div key={i.id} className="flex items-center justify-between gap-2 py-1 border-b border-line last:border-0">
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <div className="de-text !text-[1.05rem]">{i.german}</div>
                   <div className="zh-text">{i.chinese}</div>
                 </div>
@@ -127,9 +127,9 @@ export default function ProgressPage() {
         ) : (
           <ul className="text-sm text-ink space-y-1">
             {dueSoon.slice(0, 8).map((i) => (
-              <li key={i.id} className="flex justify-between">
-                <span className="de-text !text-[1rem]">{i.german}</span>
-                <span className="text-muted">
+              <li key={i.id} className="flex justify-between gap-2">
+                <span className="de-text !text-[1rem] flex-1 min-w-0">{i.german}</span>
+                <span className="text-muted shrink-0">
                   {daysBetween(now, states[i.id].nextReview) <= 0 ? "今天" : "明天"}
                 </span>
               </li>

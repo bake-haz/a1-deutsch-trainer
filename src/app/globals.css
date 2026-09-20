@@ -15,14 +15,22 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* App shell: mobile-first, max width centered on desktop */
+/* App shell: mobile-first, max width centered on desktop.
+   `100dvh` (with a `100vh` fallback) avoids the mobile browser toolbar
+   cutting off the bottom of the page that plain `100vh` causes. */
 .app-shell {
   max-width: 480px;
   margin: 0 auto;
   min-height: 100vh;
+  min-height: 100dvh;
   background: #ffffff;
   position: relative;
   box-shadow: 0 0 0 1px #e3e8ec;
+}
+
+/* Space reserved for the fixed bottom nav so the last card is never covered. */
+.shell-main {
+  padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
 }
 
 /* Big, comfortable tap targets for adult learners (spec §32) */
@@ -85,6 +93,17 @@ body {
   line-height: 1.6;
   color: #1f2933;
   letter-spacing: 0.2px;
+  /* Long German compounds (Krankenpflegerin …) must wrap, never overflow. */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  min-width: 0;
+}
+
+/* Anything that can hold a long German word / IPA string. */
+.break-any {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  min-width: 0;
 }
 
 /* German is the training subject; Chinese supports understanding (spec §31) */
@@ -110,12 +129,18 @@ body {
 .chip-mastered { background: #e6eef8; color: #3a6ea5; }
 
 .bottom-nav {
-  position: sticky;
+  position: fixed;
+  left: 0;
+  right: 0;
   bottom: 0;
+  z-index: 30;
+  max-width: 480px;
+  margin: 0 auto;
   background: #fff;
   border-top: 1px solid #e3e8ec;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 .bottom-nav a {
   display: flex;
@@ -123,7 +148,8 @@ body {
   align-items: center;
   justify-content: center;
   gap: 2px;
-  padding: 8px 0;
+  padding: 8px 2px;
+  min-width: 0;
   font-size: 0.72rem;
   color: #67737d;
   text-decoration: none;
@@ -135,6 +161,10 @@ body {
 .bottom-nav a .ico {
   font-size: 1.25rem;
   line-height: 1;
+}
+.bottom-nav a .lbl {
+  white-space: nowrap;
+  line-height: 1.15;
 }
 
 /* input */
@@ -154,3 +184,23 @@ body {
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
+
+/* Header back control for secondary pages (settings / detail / sub-pages). */
+.back-btn {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 10px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1f2933;
+  background: #eef1f3;
+  border: 1px solid #e3e8ec;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.back-btn:active {
+  transform: scale(0.98);
+}

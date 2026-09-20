@@ -67,7 +67,7 @@ function TrainInner() {
     const title =
       mode === "low" ? "保底模式" : foundationFilter ? "地基训练" : "今天";
     return (
-      <AppFrame title="训练" subtitle={title}>
+      <AppFrame title="训练" subtitle={title} back={!!(focusId || foundationFilter)}>
         <div className="card text-center py-10">
           <div className="text-4xl mb-3">🎉</div>
           <div className="text-lg font-bold text-ink mb-2">暂时没有需要练习的内容</div>
@@ -118,7 +118,7 @@ function TrainInner() {
   // Summary view
   if (idx >= queue.length) {
     return (
-      <AppFrame title="训练完成">
+      <AppFrame title="训练完成" back={!!(focusId || foundationFilter)}>
         <div className="card text-center py-8">
           <div className="text-4xl mb-3">✅</div>
           <div className="text-xl font-bold text-ink mb-1">本轮训练完成</div>
@@ -155,7 +155,7 @@ function TrainInner() {
     mode === "low" ? "保底模式" : foundationFilter ? "地基训练" : "今天训练";
 
   return (
-    <AppFrame title="训练" subtitle={`${title} · ${idx + 1}/${total}`}>
+    <AppFrame title="训练" subtitle={`${title} · ${idx + 1}/${total}`} back={!!(focusId || foundationFilter)}>
       <div className="mb-3">
         <div className="h-2 rounded-full bg-line overflow-hidden">
           <div

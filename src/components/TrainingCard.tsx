@@ -70,8 +70,8 @@ export default function TrainingCard({
   return (
     <div className="card">
       {/* Top: priority + skill tags */}
-      <div className="flex items-center justify-between mb-3 gap-2">
-        <div className="flex gap-2 flex-wrap">
+      <div className="flex items-start justify-between mb-3 gap-2">
+        <div className="flex gap-2 flex-wrap min-w-0">
           <span className={`chip ${item.priority === "FOUNDATION" ? "chip-learning" : item.priority === "PASS" ? "chip-mastered" : "chip-new"}`}>
             {item.priority === "FOUNDATION" ? "地基" : item.priority === "PASS" ? "拿分" : "扩展"}
           </span>
@@ -81,7 +81,7 @@ export default function TrainingCard({
           </span>
         </div>
         <button
-          className="text-xs text-muted underline shrink-0"
+          className="text-xs text-muted underline shrink-0 inline-flex items-center min-h-[36px] px-1"
           onClick={() => setHideText((h) => !h)}
           aria-label="切换显示文字"
         >
@@ -93,8 +93,8 @@ export default function TrainingCard({
       {item.prompt && (
         <div className="mb-2">
           <div className="text-xs text-muted mb-1">问题 / 情境</div>
-          <div className="de-text flex items-center gap-2">
-            {!hideText && <ClickableGerman text={item.prompt} />}
+          <div className="de-text flex items-start gap-2 min-w-0">
+            {!hideText && <span className="flex-1 min-w-0"><ClickableGerman text={item.prompt} /></span>}
             <button
               className="tap btn-ghost !px-2 !min-h-[36px] !text-sm"
               onClick={() => play(item.prompt!)}
@@ -109,22 +109,24 @@ export default function TrainingCard({
       {/* Target sentence with progressive reveal */}
       <div className="mb-3">
         <div className="text-xs text-muted mb-1">目标（德语）· 点词可查词</div>
-        <div className="de-text flex items-center gap-2 flex-wrap">
+        <div className="de-text flex items-start gap-2 flex-wrap min-w-0">
           {!hideText && (
-            <ClickableGerman
-              text={
-                showFull
-                  ? answer
-                  : showPartial
-                  ? `${partial(answer)}（剩余隐藏）`
-                  : showFirst
-                  ? `${firstWord(answer)} _____`
-                  : "（先用中文回忆，需要时点「看提示」）"
-              }
-            />
+            <span className="flex-1 min-w-0">
+              <ClickableGerman
+                text={
+                  showFull
+                    ? answer
+                    : showPartial
+                    ? `${partial(answer)}（剩余隐藏）`
+                    : showFirst
+                    ? `${firstWord(answer)} _____`
+                    : "（先用中文回忆，需要时点「看提示」）"
+                }
+              />
+            </span>
           )}
           <button
-            className="tap btn-ghost !px-2 !min-h-[36px] !text-sm"
+            className="tap btn-ghost !px-2 !min-h-[36px] !text-sm shrink-0"
             onClick={() => play(answer)}
             aria-label="朗读目标句"
           >
@@ -144,7 +146,7 @@ export default function TrainingCard({
       <div className="mb-2">
         <input
           className="field"
-          placeholder="在这里输入你的德语答案（可留空，凭记忆直接自评）"
+          placeholder="输入德语答案（可留空直接自评）"
           value={typed}
           onChange={(e) => setTyped(e.target.value)}
           autoComplete="off"
@@ -176,22 +178,25 @@ export default function TrainingCard({
       {/* Self-grade (spec §11): 不会 / 想了一会儿 / 秒答 */}
       <div className="text-xs text-muted mb-2 text-center">你刚才的回忆情况？</div>
       <div className="grid grid-cols-3 gap-2">
-        <button className="tap btn-danger !min-h-[56px] flex-col" onClick={() => grade("AGAIN")}>
+        <button className="tap btn-danger !min-h-[56px] flex-col !px-1" onClick={() => grade("AGAIN")}>
           <span className="text-base">😣</span>
-          <span>不会</span>
+          <span className="text-[0.82rem] leading-tight">不会</span>
         </button>
-        <button className="tap btn-warn !min-h-[56px] flex-col" onClick={() => grade("HARD")}>
+        <button className="tap btn-warn !min-h-[56px] flex-col !px-1" onClick={() => grade("HARD")}>
           <span className="text-base">🤔</span>
-          <span>想了一会儿</span>
+          <span className="text-[0.82rem] leading-tight">想了一会儿</span>
         </button>
-        <button className="tap btn-good !min-h-[56px] flex-col" onClick={() => grade("EASY")}>
+        <button className="tap btn-good !min-h-[56px] flex-col !px-1" onClick={() => grade("EASY")}>
           <span className="text-base">⚡</span>
-          <span>秒答</span>
+          <span className="text-[0.82rem] leading-tight">秒答</span>
         </button>
       </div>
 
-      <div className="flex items-center justify-between mt-3">
-        <button className="text-xs text-muted underline" onClick={onSkip}>
+      <div className="flex items-center justify-between mt-3 gap-2">
+        <button
+          className="text-xs text-muted underline inline-flex items-center min-h-[36px] px-1"
+          onClick={onSkip}
+        >
           跳过这一题
         </button>
         {graded && (

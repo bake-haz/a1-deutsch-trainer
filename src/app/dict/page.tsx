@@ -15,15 +15,19 @@ function DictInner() {
   }, [initial]);
 
   return (
-    <AppFrame title="查词" subtitle="德语 → 中文 · 发音 · 词性 · 例句 · 加入复习">
+    <AppFrame
+      title="查词"
+      subtitle="德语 → 中文 · 发音 · 词性 · 例句 · 加入复习"
+      back={!!initial}
+    >
       <div className="mb-3">
         <input
           className="field"
-          placeholder="输入德语单词查询，例如 wohnst / sprechen / Familie"
+          placeholder="输入德语单词，例如 wohnst"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          autoFocus
           autoComplete="off"
+          enterKeyHint="search"
         />
         <p className="text-xs text-muted mt-2">
           支持变位查询：输入 <b>wohnst</b> 会识别为 <b>wohnen</b> 的变位。训练中的德语词也可直接点击跳转到此处。
