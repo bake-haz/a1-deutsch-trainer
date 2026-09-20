@@ -5,8 +5,11 @@
   "description": "A1 Deutsch Trainer - 面向中国成年零基础德语学习者的 A1 地基 + 考试过关 + 长期记忆训练系统",
   "scripts": {
     "dev": "next dev",
+    "clean:stale": "node scripts/clean-stale.mjs",
+    "prebuild": "node scripts/clean-stale.mjs",
     "build": "next build",
-    "start": "next build && next start"
+    "start": "node scripts/clean-stale.mjs && next build && next start",
+    "postinstall": "node scripts/clean-stale.mjs"
   },
   "dependencies": {
     "next": "14.2.15",
