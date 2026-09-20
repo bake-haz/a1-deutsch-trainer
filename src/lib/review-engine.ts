@@ -13,8 +13,16 @@
 // ============================================================================
 
 import type { LearningItem, ReviewState, ResponseQuality, Mastery } from "./types";
+import { ALLOWED_PROVENANCE } from "./types";
 
 export const REVIEW_INTERVALS_DAYS = [0, 1, 3, 7, 14, 30]; // index 0 = same day
+
+// Only the two allowed sources may enter the training queue. This is a defensive
+// guard: if any content ever carries a different / unknown provenance it will be
+// kept out of training rather than silently taught.
+export function isTrainable(item: Pick<LearningItem, "sourceType">): boolean {
+  return ALLOWED_PROVENANCE.includes(item.sourceType);
+}
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -119,14 +127,13 @@ export function buildSessionQueue(
     newLimit: number;
     reviewLimit: number;
     lowMode?: boolean;
-    unitFilter?: number;
     foundationFilter?: string;
     now?: string;
   }
 ): DueSelection {
   const now = opts.now ?? nowISO();
-  let pool = items;
-  if (opts.unitFilter != null) pool = pool.filter((i) => i.courseUnit === opts.unitFilter);
+  // Drop items whose provenance is unknown — they must not be trained by default.
+  let pool = items.filter((i) => isTrainable(i));
   if (opts.foundationFilter) pool = pool.filter((i) => i.foundation === opts.foundationFilter);
 
   const review: LearningItem[] = [];

@@ -26,7 +26,7 @@ function DictInner() {
           autoComplete="off"
         />
         <p className="text-xs text-muted mt-2">
-          支持变位查询：输入 <b>wohnst</b> 会识别为 <b>wohnen</b> 的变位。训练与教材中的德语词也可直接点击跳转到此处。
+          支持变位查询：输入 <b>wohnst</b> 会识别为 <b>wohnen</b> 的变位。训练中的德语词也可直接点击跳转到此处。
         </p>
       </div>
 

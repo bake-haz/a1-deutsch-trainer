@@ -5,7 +5,7 @@ import { useStore } from "@/components/StoreProvider";
 import { useTts } from "@/components/TtsProvider";
 
 export default function SettingsPage() {
-  const { store, updateSettings, updateCourseProgress, resetAll } = useStore();
+  const { store, updateSettings, resetAll } = useStore();
   const tts = useTts();
   if (!store) return <AppFrame title="设置"><div className="text-muted">加载中…</div></AppFrame>;
 
@@ -82,34 +82,12 @@ export default function SettingsPage() {
           />
         </div>
 
-        {/* Class progress */}
-        <div className="card">
-          <div className="font-semibold text-ink mb-2">课堂进度</div>
-          <label className="text-sm text-ink flex items-center justify-between gap-2">
-            <span>当前课堂 Unit</span>
-            <span className="text-muted">Unit {s.classUnit}</span>
-          </label>
-          <input
-            type="range"
-            min={1}
-            max={16}
-            step={1}
-            value={s.classUnit}
-            onChange={(e) => {
-              const v = Number(e.target.value);
-              updateSettings({ classUnit: v });
-              updateCourseProgress({ currentClassUnit: v });
-            }}
-            className="w-full mt-1"
-          />
-          <p className="text-xs text-muted mt-1">仅用于显示「课堂进度 vs 真实掌握」，不影响训练安排。</p>
-        </div>
-
         {/* Data */}
         <div className="card">
           <div className="font-semibold text-ink mb-2">学习数据</div>
           <p className="text-xs text-muted mb-2">
-            数据仅保存在本机浏览器（localStorage）。刷新、关闭重开、换手机重进都不会丢。未来可迁移到云端数据库。
+            数据仅保存在本机浏览器（localStorage）：刷新、关闭重开后不会丢；
+            但不会跨设备同步（换手机 / 换浏览器是各自独立的数据）。
           </p>
           <button
             className="tap btn-danger w-full !min-h-[48px]"

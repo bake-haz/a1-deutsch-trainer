@@ -14,18 +14,12 @@ const DEFAULT_SETTINGS: Settings = {
   audioRate: 0.85, // slower for adult learners
   dailyNewLimit: 4, // adult slow-learning: very few new items/day
   lowModeLimit: 6,
-  classUnit: 1,
 };
 
 function defaultStore(): Store {
   return {
     version: STORE_VERSION,
     reviewStates: {},
-    courseProgress: {
-      currentClassUnit: 1,
-      currentBookPage: 8,
-      lastStudyDate: null,
-    },
     examSkills: {},
     dailySessions: [],
     settings: { ...DEFAULT_SETTINGS },

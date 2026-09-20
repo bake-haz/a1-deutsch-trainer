@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
-import type { Store, ReviewState, ResponseQuality, Settings, DailySession, CourseProgress, LearningItem } from "../lib/types";
+import type { Store, ReviewState, ResponseQuality, Settings, DailySession, LearningItem } from "../lib/types";
 import { loadStore, saveStore, clearStore } from "../lib/storage";
 import { applyReview, createReviewState, nowISO } from "../lib/review-engine";
 import { LEARNING_ITEMS } from "../data/content";
@@ -12,7 +12,6 @@ interface StoreContextValue {
   ensureState: (itemId: string) => ReviewState;
   recordReview: (itemId: string, quality: ResponseQuality) => ReviewState;
   updateSettings: (patch: Partial<Settings>) => void;
-  updateCourseProgress: (patch: Partial<CourseProgress>) => void;
   addDailySession: (s: DailySession) => void;
   addCustomItem: (item: LearningItem) => void;
   allItems: LearningItem[];
@@ -56,10 +55,6 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     setStore((s) => (s ? { ...s, settings: { ...s.settings, ...patch } } : s));
   }, []);
 
-  const updateCourseProgress = useCallback((patch: Partial<CourseProgress>) => {
-    setStore((s) => (s ? { ...s, courseProgress: { ...s.courseProgress, ...patch } } : s));
-  }, []);
-
   const addDailySession = useCallback((sess: DailySession) => {
     setStore((s) => {
       if (!s) return s;
@@ -92,13 +87,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       ensureState,
       recordReview,
       updateSettings,
-      updateCourseProgress,
       addDailySession,
       addCustomItem,
       allItems,
       resetAll,
     }),
-    [store, ensureState, recordReview, updateSettings, updateCourseProgress, addDailySession, addCustomItem, allItems, resetAll]
+    [store, ensureState, recordReview, updateSettings, addDailySession, addCustomItem, allItems, resetAll]
   );
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

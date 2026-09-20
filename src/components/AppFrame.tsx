@@ -25,9 +25,6 @@ export default function AppFrame({
           </div>
           <div className="flex items-center gap-2 shrink-0">
             {right}
-            <Link href="/dict" className="tap btn-ghost !px-3 !min-h-[40px] text-sm" aria-label="查词">
-              🔍
-            </Link>
             <Link href="/settings" className="tap btn-ghost !px-3 !min-h-[40px] text-sm" aria-label="设置">
               设置
             </Link>

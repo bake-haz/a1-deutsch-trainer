@@ -5,6 +5,7 @@ import type { LearningItem, ResponseQuality } from "../lib/types";
 import { useTts } from "./TtsProvider";
 import ClickableGerman from "./ClickableGerman";
 import { MASTERY_LABEL } from "../lib/review-engine";
+import { PROVENANCE_LABEL, PROVENANCE_CHIP, PROVENANCE_HINT } from "../lib/labels";
 
 // Progressive hint levels (spec §10 / §37): gradually remove support.
 // 0 = pure recall (only prompt + audio), 4 = full answer visible.
@@ -69,15 +70,18 @@ export default function TrainingCard({
   return (
     <div className="card">
       {/* Top: priority + skill tags */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex gap-2">
+      <div className="flex items-center justify-between mb-3 gap-2">
+        <div className="flex gap-2 flex-wrap">
           <span className={`chip ${item.priority === "FOUNDATION" ? "chip-learning" : item.priority === "PASS" ? "chip-mastered" : "chip-new"}`}>
             {item.priority === "FOUNDATION" ? "地基" : item.priority === "PASS" ? "拿分" : "扩展"}
           </span>
           <span className="chip chip-new">{item.skill}</span>
+          <span className={`chip ${PROVENANCE_CHIP[item.sourceType]}`} title={PROVENANCE_HINT[item.sourceType]}>
+            {PROVENANCE_LABEL[item.sourceType]}
+          </span>
         </div>
         <button
-          className="text-xs text-muted underline"
+          className="text-xs text-muted underline shrink-0"
           onClick={() => setHideText((h) => !h)}
           aria-label="切换显示文字"
         >

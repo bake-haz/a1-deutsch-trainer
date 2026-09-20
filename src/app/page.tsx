@@ -28,24 +28,23 @@ export default function HomePage() {
   const newCount = sel.newItems.length;
   const reviewCount = sel.reviewItems.length;
   const total = newCount + reviewCount;
-  const classUnit = store.courseProgress.currentClassUnit;
 
   const plan = [
-    { label: "旧知识唤醒", min: 5, icon: "🔁" },
-    { label: "核心句型", min: 8, icon: "💬" },
+    { label: "旧知识复习", min: 5, icon: "🔁" },
+    { label: "少量新内容", min: 8, icon: "💬" },
     { label: "听力反应", min: 6, icon: "🎧" },
     { label: "主动回忆", min: 6, icon: "🧠" },
-    { label: "A1 拿分训练", min: 5, icon: "🎯" },
+    { label: "A1 基础训练", min: 5, icon: "🎯" },
   ];
 
   return (
     <AppFrame
       title="今天"
-      subtitle={`A1 Foundation · 课堂进度 Unit ${classUnit}`}
+      subtitle="A1 地基训练 · 每天稳一点"
     >
       <section className="card mb-4">
         <div className="text-sm text-muted mb-1">今日建议学习时间</div>
-        <div className="text-2xl font-bold text-ink mb-3">约 20–40 分钟</div>
+        <div className="text-2xl font-bold text-ink mb-3">约 30 分钟</div>
         <ul className="space-y-2">
           {plan.map((p) => (
             <li key={p.label} className="flex items-center justify-between text-sm">
@@ -99,10 +98,10 @@ export default function HomePage() {
           <div className="text-sm font-semibold text-ink">地基地图</div>
           <div className="text-xs text-muted">看掌握情况</div>
         </Link>
-        <Link href="/textbook" className="card !p-3 text-center hover:border-brand">
-          <div className="text-xl">📖</div>
-          <div className="text-sm font-semibold text-ink">教材</div>
-          <div className="text-xs text-muted">原书 + 结构化</div>
+        <Link href="/dict" className="card !p-3 text-center hover:border-brand">
+          <div className="text-xl">🔍</div>
+          <div className="text-sm font-semibold text-ink">查词</div>
+          <div className="text-xs text-muted">发音 · 变位 · 加入复习</div>
         </Link>
       </div>
     </AppFrame>

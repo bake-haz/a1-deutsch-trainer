@@ -7,15 +7,19 @@ import type { FoundationCategory, Mastery } from "@/lib/types";
 import { MASTERY_LABEL } from "@/lib/review-engine";
 
 const ALL_CATEGORIES: FoundationCategory[] = [
-  "发音基础",
   "字母",
+  "发音规则",
   "人称代词",
   "sein",
   "haben",
-  "规则动词",
-  "核心不规则动词",
-  "动词人称变化",
-  "基本陈述句",
+  "heißen",
+  "kommen",
+  "wohnen",
+  "sprechen",
+  "lernen",
+  "machen",
+  "动词变位",
+  "陈述句语序",
   "W-Fragen",
   "Ja/Nein-Fragen",
   "否定",
@@ -28,7 +32,6 @@ const ALL_CATEGORIES: FoundationCategory[] = [
   "住址",
   "职业",
   "家庭",
-  "购物",
   "基础生活表达",
 ];
 
@@ -71,7 +74,8 @@ export default function FoundationPage() {
   return (
     <AppFrame title="地基" subtitle={`A1 知识地图 · ${masteredCount}/${total} 类已掌握`}>
       <p className="text-xs text-muted mb-3">
-        地基必须稳。状态来自你真实训练结果，不是“完成百分比”。薄弱项会进入每日复习。
+        本页是「通用 A1 地基」知识地图（也包含你课程内容中的相关知识点）。
+        状态来自你真实训练结果，不是“完成百分比”。薄弱项会进入每日复习。
       </p>
 
       <div className="space-y-2">

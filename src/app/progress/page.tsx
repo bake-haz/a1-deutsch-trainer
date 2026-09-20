@@ -4,7 +4,8 @@ import Link from "next/link";
 import AppFrame from "@/components/AppFrame";
 import { useStore } from "@/components/StoreProvider";
 import { MASTERY_LABEL, daysBetween } from "@/lib/review-engine";
-import type { Mastery } from "@/lib/types";
+import type { Mastery, Provenance } from "@/lib/types";
+import { PROVENANCE_LABEL } from "@/lib/labels";
 
 export default function ProgressPage() {
   const { store, allItems } = useStore();
@@ -28,19 +29,17 @@ export default function ProgressPage() {
     return d <= 1;
   });
 
-  // Real mastery per unit (1-2 structured so far)
-  const unitProgress = [1, 2].map((u) => {
-    const items = allItems.filter((i) => i.courseUnit === u);
+  // Real mastery per source (two sources only).
+  const bySource = (["USER_CONFIRMED", "GENERAL_A1"] as Provenance[]).map((s) => {
+    const items = allItems.filter((i) => i.sourceType === s);
     const stable = items.filter((i) => {
       const m = states[i.id]?.mastery;
       return m === "STABLE" || m === "MASTERED";
     }).length;
-    return { u, total: items.length, stable };
+    return { s, total: items.length, stable };
   });
 
   const last = store.dailySessions[store.dailySessions.length - 1];
-
-  const classUnit = store.courseProgress.currentClassUnit;
 
   return (
     <AppFrame title="进度" subtitle="真实掌握情况，而非打卡数字">
@@ -79,20 +78,20 @@ export default function ProgressPage() {
         </section>
       )}
 
-      {/* Class vs real mastery */}
+      {/* Real mastery by source */}
       <section className="card mb-4">
-        <h2 className="text-sm font-bold text-ink mb-2">课堂进度 vs 真实掌握</h2>
+        <h2 className="text-sm font-bold text-ink mb-2">按来源看真实掌握</h2>
         <div className="text-xs text-muted mb-2">
-          课堂已到 Unit {classUnit}；但掌握进度由你真实训练决定，不自动等同于课堂进度。
+          掌握进度由你真实训练决定。两种来源分开统计，互不冒充。
         </div>
-        {unitProgress.map((u) => (
-          <div key={u.u} className="mb-2">
+        {bySource.map((x) => (
+          <div key={x.s} className="mb-2">
             <div className="flex justify-between text-sm">
-              <span className="text-ink">Unit {u.u}</span>
-              <span className="text-muted">{u.stable}/{u.total} 稳定/掌握</span>
+              <span className="text-ink">{PROVENANCE_LABEL[x.s]}</span>
+              <span className="text-muted">{x.stable}/{x.total} 稳定/掌握</span>
             </div>
             <div className="h-2 rounded-full bg-line overflow-hidden mt-1">
-              <div className="h-full bg-brand" style={{ width: `${u.total ? (u.stable / u.total) * 100 : 0}%` }} />
+              <div className="h-full bg-brand" style={{ width: `${x.total ? (x.stable / x.total) * 100 : 0}%` }} />
             </div>
           </div>
         ))}
@@ -111,7 +110,7 @@ export default function ProgressPage() {
                   <div className="de-text !text-[1.05rem]">{i.german}</div>
                   <div className="zh-text">{i.chinese}</div>
                 </div>
-                <Link href={`/train?unit=${i.courseUnit}&focus=${i.id}`} className="tap btn-warn !px-3 !min-h-[36px] !text-xs shrink-0">
+                <Link href={`/train?focus=${i.id}`} className="tap btn-warn !px-3 !min-h-[36px] !text-xs shrink-0">
                   复习
                 </Link>
               </div>

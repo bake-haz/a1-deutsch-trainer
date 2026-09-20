@@ -13,13 +13,22 @@ export interface WikiResult {
 export async function wikiLookup(word: string, signal?: AbortSignal): Promise<WikiResult | null> {
   const w = word.trim();
   if (!w) return null;
+  // Internal timeout so a hanging/unreachable network never blocks the UI.
+  // Best-effort only: failure is expected and handled by the caller.
+  const timeoutMs = 5000;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  if (signal) {
+    if (signal.aborted) ctrl.abort();
+    else signal.addEventListener("abort", () => ctrl.abort(), { once: true });
+  }
   try {
     const url =
       "https://de.wiktionary.org/w/api.php" +
       "?action=query&titles=" +
       encodeURIComponent(w) +
       "&prop=revisions&rvprop=content&rvslots=main&format=json&origin=*";
-    const res = await fetch(url, { signal });
+    const res = await fetch(url, { signal: ctrl.signal });
     if (!res.ok) return null;
     const data = await res.json();
     const pages = data?.query?.pages;
@@ -44,5 +53,7 @@ export async function wikiLookup(word: string, signal?: AbortSignal): Promise<Wi
     return { ipa, gloss };
   } catch {
     return null;
+  } finally {
+    clearTimeout(timer);
   }
 }

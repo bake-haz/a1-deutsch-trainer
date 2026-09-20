@@ -9,7 +9,7 @@ import { useStore } from "@/components/StoreProvider";
 import { buildSessionQueue } from "@/lib/review-engine";
 import type { LearningItem, ResponseQuality, DailySession } from "@/lib/types";
 
-type Mode = "today" | "low" | "unit" | "foundation" | "review";
+type Mode = "today" | "low" | "foundation" | "review";
 
 function initialLevelFor(stage: number): number {
   // stage 1 (NEW) -> show full sentence; stage 5 (MASTERED) -> pure recall
@@ -21,7 +21,6 @@ function TrainInner() {
   const { store, recordReview, addDailySession, allItems } = useStore();
 
   const mode = (params.get("mode") as Mode) || "today";
-  const unitFilter = params.get("unit") ? Number(params.get("unit")) : undefined;
   const foundationFilter = params.get("foundation") || undefined;
   const focusId = params.get("focus") || undefined;
 
@@ -31,7 +30,6 @@ function TrainInner() {
       newLimit: store.settings.dailyNewLimit,
       reviewLimit: mode === "low" ? 6 : 14,
       lowMode: mode === "low",
-      unitFilter,
       foundationFilter,
       now: new Date().toISOString(),
     });
@@ -45,7 +43,7 @@ function TrainInner() {
       }
     }
     return combined;
-  }, [store, mode, unitFilter, foundationFilter, focusId, store?.settings.dailyNewLimit]);
+  }, [store, mode, foundationFilter, focusId, store?.settings.dailyNewLimit]);
 
   const [idx, setIdx] = useState(0);
   const [done, setDone] = useState(0);
@@ -67,14 +65,14 @@ function TrainInner() {
 
   if (queue.length === 0) {
     const title =
-      mode === "low" ? "保底模式" : unitFilter ? `Unit ${unitFilter}` : foundationFilter ? "地基训练" : "今天";
+      mode === "low" ? "保底模式" : foundationFilter ? "地基训练" : "今天";
     return (
       <AppFrame title="训练" subtitle={title}>
         <div className="card text-center py-10">
           <div className="text-4xl mb-3">🎉</div>
           <div className="text-lg font-bold text-ink mb-2">暂时没有需要练习的内容</div>
           <p className="text-sm text-muted mb-4">
-            当前没有到期的复习项，新内容也已达今日上限。明天再来，或去「教材」提前看看。
+            当前没有到期的复习项，新内容也已达今日上限。明天再来，或去「地基」看看已掌握的内容。
           </p>
           <Link href="/" className="tap btn-primary">
             返回今天
@@ -98,7 +96,7 @@ function TrainInner() {
       // session finished -> save daily session
       const sess: DailySession = {
         date: new Date().toISOString().slice(0, 10),
-        mode: mode === "review" ? "review" : mode === "low" ? "low" : unitFilter ? "unit" : foundationFilter ? "foundation" : "today",
+        mode: mode === "review" ? "review" : mode === "low" ? "low" : foundationFilter ? "foundation" : "today",
         items: queue.map((i) => i.id),
         completedItems: done + 1,
         newItems: newCount + (state == null ? 1 : 0),
@@ -154,7 +152,7 @@ function TrainInner() {
 
   const total = queue.length;
   const title =
-    mode === "low" ? "保底模式" : unitFilter ? `Unit ${unitFilter} 训练` : foundationFilter ? "地基训练" : "今天训练";
+    mode === "low" ? "保底模式" : foundationFilter ? "地基训练" : "今天训练";
 
   return (
     <AppFrame title="训练" subtitle={`${title} · ${idx + 1}/${total}`}>

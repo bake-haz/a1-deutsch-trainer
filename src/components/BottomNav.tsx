@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 const TABS = [
   { href: "/", label: "今天", ico: "🏠" },
   { href: "/train", label: "训练", ico: "🎯" },
-  { href: "/textbook", label: "教材", ico: "📖" },
   { href: "/foundation", label: "地基", ico: "🧱" },
+  { href: "/dict", label: "查词", ico: "🔍" },
   { href: "/progress", label: "进度", ico: "📈" },
 ];
 
