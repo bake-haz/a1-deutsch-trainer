@@ -93,6 +93,11 @@ export default function HomePage() {
       </button>
 
       <div className="mt-6 grid grid-cols-2 gap-3">
+        <Link href="/speaking" className="card !p-3 text-center hover:border-brand">
+          <div className="text-xl">🎙️</div>
+          <div className="text-sm font-semibold text-ink">跟读评分</div>
+          <div className="text-xs text-muted">听标准音 · 自己读 · 看差距</div>
+        </Link>
         <Link href="/foundation" className="card !p-3 text-center hover:border-brand">
           <div className="text-xl">🧱</div>
           <div className="text-sm font-semibold text-ink">地基地图</div>
