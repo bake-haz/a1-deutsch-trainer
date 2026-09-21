@@ -170,6 +170,7 @@ export default function SpeakingPage() {
   const [result, setResult] = useState<RecognitionResult | null>(null);
   const [support, setSupport] = useState<boolean | null>(null);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+  const transcriptRef = useRef("");
 
   const items = useMemo(
     () =>
@@ -201,6 +202,7 @@ export default function SpeakingPage() {
 
     setResult(null);
     setLiveText("");
+    transcriptRef.current = "";
 
     const recognition = new Ctor();
     recognition.lang = "de-DE";
@@ -214,6 +216,7 @@ export default function SpeakingPage() {
         combined += event.results[k][0]?.transcript ?? "";
         if (k < event.results.length - 1) combined += " ";
       }
+      transcriptRef.current = combined;
       setLiveText(combined);
     };
 
@@ -240,8 +243,7 @@ export default function SpeakingPage() {
 
     recognition.onend = () => {
       setListening(false);
-      const heard = liveText;
-      setResult(scoreRecognition(item.de, heard));
+      setResult(scoreRecognition(item.de, transcriptRef.current));
     };
 
     recognitionRef.current = recognition;
@@ -252,15 +254,6 @@ export default function SpeakingPage() {
   const stopRecognition = () => {
     recognitionRef.current?.stop();
   };
-
-  useEffect(() => {
-    if (!isListening || !recognitionRef.current) return;
-    const r = recognitionRef.current;
-    r.onend = () => {
-      setListening(false);
-      setResult(scoreRecognition(item.de, liveText));
-    };
-  }, [liveText, isListening, item.de]);
 
   const next = () => {
     setIndex((v) => (v + 1) % items.length);
