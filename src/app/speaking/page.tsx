@@ -19,6 +19,11 @@ type RecognitionResult = {
   feedback: string;
 };
 
+type SpeakingStats = Record<
+  string,
+  { attempts: number; lastScore: number; bestScore: number }
+>;
+
 type SpeechRecognitionEventLike = Event & {
   results: {
     length: number;
@@ -169,6 +174,7 @@ export default function SpeakingPage() {
   const [liveText, setLiveText] = useState("");
   const [result, setResult] = useState<RecognitionResult | null>(null);
   const [support, setSupport] = useState<boolean | null>(null);
+  const [stats, setStats] = useState<SpeakingStats>({});
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
   const transcriptRef = useRef("");
 
@@ -191,6 +197,12 @@ export default function SpeakingPage() {
   useEffect(() => {
     const Ctor = window.SpeechRecognition || window.webkitSpeechRecognition;
     setSupport(Boolean(Ctor));
+    try {
+      const raw = window.localStorage.getItem("a1dt:speaking-stats:v1");
+      if (raw) setStats(JSON.parse(raw));
+    } catch {
+      // Ignore damaged or unavailable localStorage.
+    }
     return () => {
       recognitionRef.current?.abort();
     };
@@ -243,7 +255,27 @@ export default function SpeakingPage() {
 
     recognition.onend = () => {
       setListening(false);
-      setResult(scoreRecognition(item.de, transcriptRef.current));
+      const scored = scoreRecognition(item.de, transcriptRef.current);
+      setResult(scored);
+      if (scored.transcript) {
+        setStats((prev) => {
+          const old = prev[item.id] ?? { attempts: 0, lastScore: 0, bestScore: 0 };
+          const next = {
+            ...prev,
+            [item.id]: {
+              attempts: old.attempts + 1,
+              lastScore: scored.score,
+              bestScore: Math.max(old.bestScore, scored.score),
+            },
+          };
+          try {
+            window.localStorage.setItem("a1dt:speaking-stats:v1", JSON.stringify(next));
+          } catch {
+            // Scoring still works when storage is unavailable.
+          }
+          return next;
+        });
+      }
     };
 
     recognitionRef.current = recognition;
@@ -319,7 +351,15 @@ export default function SpeakingPage() {
         </div>
 
         <div className="de-text text-2xl font-bold mb-1">{item.de}</div>
-        <div className="zh-text mb-4">{item.zh}</div>
+        <div className="zh-text mb-3">{item.zh}</div>
+
+        {stats[item.id] && (
+          <div className="flex gap-2 mb-4 text-xs text-muted">
+            <span>已练 {stats[item.id].attempts} 次</span>
+            <span>上次 {stats[item.id].lastScore} 分</span>
+            <span>最好 {stats[item.id].bestScore} 分</span>
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-2">
           <button
