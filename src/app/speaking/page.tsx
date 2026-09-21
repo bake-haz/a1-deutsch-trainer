@@ -66,7 +66,7 @@ function normalize(text: string): string[] {
     .toLocaleLowerCase("de-DE")
     .replace(/[.,!?;:“”"„()]/g, " ")
     .replace(/ß/g, "ss")
-    .replace(/\\s+/g, " ")
+    .replace(/\s+/g, " ")
     .trim()
     .split(" ")
     .filter(Boolean);
